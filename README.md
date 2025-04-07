@@ -21,7 +21,7 @@ A Java-based Car Rental System with JavaFX frontend and MongoDB backend.
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/anujlunawat/Car-Rental-System.git
 cd car-rental-system
 ```
 
@@ -55,14 +55,6 @@ src/
 │   └── resources/
 │       └── fxml/                  # FXML files for UI
 ```
-
-## Default Admin Account
-
-To create the first admin account, you can use the registration screen with the following credentials:
-- Username: admin
-- Password: admin123
-- Email: admin@carrental.com
-- Phone: 1234567890
 
 After registration, you'll need to manually update the user's role to ADMIN in the MongoDB database.
 
