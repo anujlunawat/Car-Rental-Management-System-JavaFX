@@ -15,6 +15,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -23,8 +25,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
-
-import org.bson.types.ObjectId;
+import java.util.Date;
 
 public class BookCarController {
     @FXML
@@ -236,16 +237,7 @@ public class BookCarController {
             // Set the total price
             booking.setTotalPrice(totalPrice);
             
-            // Log the booking details before saving
-            System.out.println("Saving booking with details:");
-            System.out.println("Booking ID: " + booking.getId());
-            System.out.println("Car: " + booking.getCar().getBrand() + " " + booking.getCar().getModel());
-            System.out.println("User: " + booking.getUser().getEmail());
-            System.out.println("Start Date: " + booking.getStartDateStr());
-            System.out.println("End Date: " + booking.getEndDateStr());
-            System.out.println("Total Price: " + booking.getTotalPrice());
-            
-            // Save the booking to MongoDB
+            // Save the booking to MongoDB first
             try {
                 datastore.save(booking);
                 System.out.println("Booking saved successfully to MongoDB");
@@ -253,6 +245,30 @@ public class BookCarController {
                 System.err.println("Error saving booking to MongoDB: " + e.getMessage());
                 e.printStackTrace();
                 showMessage("Error saving booking to database: " + e.getMessage(), true);
+                return;
+            }
+
+            // Create payment document
+            Document paymentDoc = new Document()
+                .append("_id", new ObjectId())
+                .append("bookingId", booking.getId().toString())
+                .append("amount", totalPrice)
+                .append("paymentMethod", "OTS")
+                .append("transactionId", "TXN" + System.currentTimeMillis() + (int)(Math.random() * 1000))
+                .append("paymentDate", new Date())
+                .append("status", "COMPLETED");
+
+            // Save payment to MongoDB using the same connection
+            try {
+                com.mongodb.client.MongoCollection<Document> paymentsCollection = 
+                    datastore.getDatabase().getCollection("payments");
+                paymentsCollection.insertOne(paymentDoc);
+                System.out.println("Payment saved successfully to MongoDB");
+                System.out.println("Payment details: " + paymentDoc.toJson());
+            } catch (Exception e) {
+                System.err.println("Error saving payment to MongoDB: " + e.getMessage());
+                e.printStackTrace();
+                showMessage("Error saving payment to database: " + e.getMessage(), true);
                 return;
             }
             
@@ -272,6 +288,8 @@ public class BookCarController {
             content.append("   • Start: ").append(startDateTimeStr).append("\n");
             content.append("   • End: ").append(endDateTimeStr).append("\n\n");
             content.append("💰 Total Price: ₹").append(String.format("%.2f", totalPrice)).append("\n\n");
+            content.append("Payment Method: OTS (On The Spot)\n");
+            content.append("Transaction ID: ").append(paymentDoc.getString("transactionId")).append("\n\n");
             content.append("Thank you for choosing our service! 🚗");
             
             alert.setContentText(content.toString());

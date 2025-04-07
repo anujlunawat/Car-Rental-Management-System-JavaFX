@@ -25,6 +25,9 @@ import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import org.bson.Document;
+import javafx.application.Platform;
+
 public class MyBookingsController {
     @FXML
     private ComboBox<String> statusFilter;
@@ -69,7 +72,12 @@ public class MyBookingsController {
     
     public void setCurrentUser(User user) {
         this.currentUser = user;
-        loadBookings();
+        // Load bookings immediately after setting user
+        Platform.runLater(() -> {
+            loadBookings();
+            // Force the table to refresh
+            bookingsTable.refresh();
+        });
     }
     
     private void setupTableColumns() {
@@ -121,22 +129,22 @@ public class MyBookingsController {
         // Setup actions column with styled buttons
         actionsColumn.setCellFactory(column -> new TableCell<Booking, Void>() {
             private final Button cancelButton = new Button("Cancel");
-            // private final Button viewButton = new Button("View");
+            private final Button viewButton = new Button("View");
             
             {
                 // Style the buttons
                 cancelButton.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-padding: 5 10;");
-                // viewButton.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-padding: 5 10;");
+                viewButton.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-padding: 5 10;");
                 
                 cancelButton.setOnAction(event -> {
                     Booking booking = getTableView().getItems().get(getIndex());
                     handleCancelBooking(booking);
                 });
                 
-                // viewButton.setOnAction(event -> {
-                //     Booking booking = getTableView().getItems().get(getIndex());
-                //     handleViewBooking(booking);
-                // });
+                viewButton.setOnAction(event -> {
+                    Booking booking = getTableView().getItems().get(getIndex());
+                    handleViewBooking(booking);
+                });
             }
             
             @Override
@@ -153,7 +161,7 @@ public class MyBookingsController {
                         booking.getStatus() == Booking.BookingStatus.CONFIRMED) {
                         buttons.getChildren().add(cancelButton);
                     }
-                    // buttons.getChildren().add(viewButton);
+                    buttons.getChildren().add(viewButton);
                     setGraphic(buttons);
                 }
             }
@@ -181,8 +189,21 @@ public class MyBookingsController {
                 // Convert to observable list
                 bookingsList = FXCollections.observableArrayList(bookings);
                 
-                // Sort bookings by start date (most recent first)
-                bookingsList.sort((b1, b2) -> b2.getStartDate().compareTo(b1.getStartDate()));
+                // Sort bookings by start date (most recent first), handling null dates
+                bookingsList.sort((b1, b2) -> {
+                    // Handle null cases
+                    if (b1.getStartDate() == null && b2.getStartDate() == null) {
+                        return 0;
+                    }
+                    if (b1.getStartDate() == null) {
+                        return 1; // Null dates go to the end
+                    }
+                    if (b2.getStartDate() == null) {
+                        return -1; // Null dates go to the end
+                    }
+                    // Both dates are non-null, compare normally
+                    return b2.getStartDate().compareTo(b1.getStartDate());
+                });
                 
                 // Set the items in the table
                 bookingsTable.setItems(bookingsList);
@@ -191,38 +212,13 @@ public class MyBookingsController {
                 emptyStateContainer.setVisible(bookings.isEmpty());
                 bookingsTable.setVisible(!bookings.isEmpty());
                 
-                // If there are bookings, scroll to the most recent one
-                if (!bookings.isEmpty()) {
-                    // Select the first booking (most recent)
-                    bookingsTable.getSelectionModel().selectFirst();
-                    
-                    // Scroll to the selected booking
-                    bookingsTable.scrollTo(0);
-                    
-                    // Apply a highlight effect to the most recent booking
-                    javafx.application.Platform.runLater(() -> {
-                        try {
-                            // Get the first row (index 1 is the header row)
-                            if (bookingsTable.getChildrenUnmodifiable().size() > 1) {
-                                TableRow<Booking> row = (TableRow<Booking>) bookingsTable.getChildrenUnmodifiable().get(1);
-                                if (row != null) {
-                                    row.setStyle("-fx-background-color: #e8f5e9;");
-                                    
-                                    // Remove the highlight after 3 seconds
-                                    javafx.animation.PauseTransition delay = new javafx.animation.PauseTransition(javafx.util.Duration.seconds(3));
-                                    delay.setOnFinished(e -> row.setStyle(""));
-                                    delay.play();
-                                }
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    });
-                }
+                // Force the table to refresh
+                bookingsTable.refresh();
+                
             } catch (Exception e) {
-                // System.err.println("Error loading bookings: " + e.getMessage());
-                // e.printStackTrace();
-                // showError("Error loading bookings. Please try again later.");
+                System.err.println("Error loading bookings: " + e.getMessage());
+                e.printStackTrace();
+                showError("Error loading bookings. Please try again later.");
             }
         } else {
             System.out.println("Current user is null");
@@ -259,9 +255,32 @@ public class MyBookingsController {
         
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
+                // Update booking status
                 booking.setStatus(Booking.BookingStatus.CANCELLED);
-                datastore.save(booking);
-                loadBookings();
+                
+                try {
+                    // Save to database
+                    datastore.save(booking);
+                    
+                    // Update the table immediately
+                    Platform.runLater(() -> {
+                        // Refresh the current booking in the table
+                        int index = bookingsList.indexOf(booking);
+                        if (index >= 0) {
+                            bookingsList.set(index, booking);
+                        }
+                        
+                        // Force table refresh
+                        bookingsTable.refresh();
+                        
+                        // Show success message
+                        showSuccess("Booking cancelled successfully!");
+                    });
+                } catch (Exception e) {
+                    System.err.println("Error cancelling booking: " + e.getMessage());
+                    e.printStackTrace();
+                    showError("Failed to cancel booking. Please try again.");
+                }
             }
         });
     }
@@ -273,43 +292,89 @@ public class MyBookingsController {
         dialog.setHeaderText("Booking #" + booking.getId());
         
         // Create a styled content
-        VBox content = new VBox(10);
+        VBox content = new VBox(20);
         content.setPadding(new Insets(20));
         content.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
         
-        // Add booking details with icons
-        HBox carDetails = new HBox(10);
-        carDetails.setAlignment(Pos.CENTER_LEFT);
-        carDetails.getChildren().addAll(
-            new Text("🚗"),
-            new Text(booking.getCar().getBrand() + " " + booking.getCar().getModel())
-        );
+        // Car Details Section
+        VBox carSection = new VBox(5);
+        carSection.setStyle("-fx-background-color: #f8f9fa; -fx-padding: 15; -fx-background-radius: 5;");
+        Label carHeader = new Label("🚗 Car Details");
+        carHeader.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+        Label carInfo = new Label(String.format("%s %s (%d)\nType: %s\nPrice per day: ₹%.2f",
+            booking.getCar().getBrand(),
+            booking.getCar().getModel(),
+            booking.getCar().getYear(),
+            booking.getCar().getCarType(),
+            booking.getCar().getPricePerDay()));
+        carInfo.setStyle("-fx-font-size: 14px;");
+        carSection.getChildren().addAll(carHeader, carInfo);
         
-        HBox dateDetails = new HBox(10);
-        dateDetails.setAlignment(Pos.CENTER_LEFT);
-        dateDetails.getChildren().addAll(
-            new Text("📅"),
-            new Text("From: " + booking.getStartDate().format(DateTimeFormatter.ofPattern("MMM dd, yyyy HH:mm"))),
-            new Text("To: " + booking.getEndDate().format(DateTimeFormatter.ofPattern("MMM dd, yyyy HH:mm")))
-        );
+        // Booking Dates Section
+        // VBox datesSection = new VBox(5);
+        // datesSection.setStyle("-fx-background-color: #f8f9fa; -fx-padding: 15; -fx-background-radius: 5;");
+        // Label datesHeader = new Label("📅 Booking Dates");
+        // datesHeader.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
         
-        HBox statusDetails = new HBox(10);
-        statusDetails.setAlignment(Pos.CENTER_LEFT);
-        String statusIcon = booking.getStatus() == Booking.BookingStatus.CONFIRMED ? "✅" :
-                          booking.getStatus() == Booking.BookingStatus.CANCELLED ? "❌" : "✔️";
-        statusDetails.getChildren().addAll(
-            new Text(statusIcon),
-            new Text("Status: " + booking.getStatus())
-        );
+        // String startDateStr = booking.getStartDate() != null ? 
+        //     booking.getStartDate().format(DateTimeFormatter.ofPattern("MMM dd, yyyy HH:mm")) : "Not set";
+        // String endDateStr = booking.getEndDate() != null ? 
+        //     booking.getEndDate().format(DateTimeFormatter.ofPattern("MMM dd, yyyy HH:mm")) : "Not set";
+            
+        // Label datesInfo = new Label(String.format("Start: %s\nEnd: %s", startDateStr, endDateStr));
+        // datesInfo.setStyle("-fx-font-size: 14px;");
+        // datesSection.getChildren().addAll(datesHeader, datesInfo);
         
-        HBox priceDetails = new HBox(10);
-        priceDetails.setAlignment(Pos.CENTER_LEFT);
-        priceDetails.getChildren().addAll(
-            new Text("💰"),
-            new Text("Total Price: ₹" + String.format("%.2f", booking.getTotalPrice()))
-        );
+        // Payment Details Section
+        VBox paymentSection = new VBox(5);
+        paymentSection.setStyle("-fx-background-color: #f8f9fa; -fx-padding: 15; -fx-background-radius: 5;");
+        Label paymentHeader = new Label("💰 Payment Details");
+        paymentHeader.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
         
-        content.getChildren().addAll(carDetails, dateDetails, statusDetails, priceDetails);
+        // Get payment details from MongoDB
+        Document paymentDoc = datastore.getDatabase()
+            .getCollection("payments")
+            .find(new Document("bookingId", booking.getId().toString()))
+            .first();
+            
+        String paymentInfo = String.format("Total Amount: ₹%.2f\n", booking.getTotalPrice());
+        if (paymentDoc != null) {
+            String paymentDateStr = paymentDoc.getDate("paymentDate") != null ?
+                paymentDoc.getDate("paymentDate").toInstant()
+                    .atZone(java.time.ZoneId.systemDefault())
+                    .format(DateTimeFormatter.ofPattern("MMM dd, yyyy HH:mm")) : "Not set";
+                    
+            paymentInfo += String.format("Transaction ID: %s\nPayment Method: %s\nPayment Date: %s",
+                paymentDoc.getString("transactionId"),
+                paymentDoc.getString("paymentMethod"),
+                paymentDateStr);
+        }
+        
+        Label paymentDetails = new Label(paymentInfo);
+        paymentDetails.setStyle("-fx-font-size: 14px;");
+        paymentSection.getChildren().addAll(paymentHeader, paymentDetails);
+        
+        // Status Section
+        VBox statusSection = new VBox(5);
+        statusSection.setStyle("-fx-background-color: #f8f9fa; -fx-padding: 15; -fx-background-radius: 5;");
+        Label statusHeader = new Label("📊 Booking Status");
+        statusHeader.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+        Label statusInfo = new Label(booking.getStatus().toString());
+        statusInfo.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+        switch (booking.getStatus()) {
+            case CONFIRMED:
+                statusInfo.setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold;");
+                break;
+            case CANCELLED:
+                statusInfo.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
+                break;
+            case COMPLETED:
+                statusInfo.setStyle("-fx-text-fill: #3498db; -fx-font-weight: bold;");
+                break;
+        }
+        statusSection.getChildren().addAll(statusHeader, statusInfo);
+        
+        content.getChildren().addAll(carSection, paymentSection, statusSection);
         
         // Set the dialog content
         dialog.getDialogPane().setContent(content);
@@ -322,6 +387,16 @@ public class MyBookingsController {
             "-fx-border-width: 2px; " +
             "-fx-border-radius: 10px; " +
             "-fx-background-radius: 10px;"
+        );
+        
+        // Style the OK button
+        Button okButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+        okButton.setStyle(
+            "-fx-background-color: #3498db; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 8 16; " +
+            "-fx-background-radius: 5px;"
         );
         
         // Show the dialog
@@ -398,6 +473,14 @@ public class MyBookingsController {
     private void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+    
+    private void showSuccess(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
