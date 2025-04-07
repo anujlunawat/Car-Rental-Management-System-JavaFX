@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<?import com.carrental.util.WindowUtil?>
+
+<VBox spacing="25" styleClass="book-car-container" xmlns:fx="http://javafx.com/fxml" fx:controller="com.carrental.controller.BookCarController" style="-fx-background-color: #f8f9fa;">
+    <padding>
+        <Insets top="30" right="40" bottom="30" left="40"/>
+    </padding>
+
+    <!-- Header Section -->
+    <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0); -fx-padding: 15;">
+        <Text text="Book Car" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-fill: #1a237e;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Cancel" onAction="#handleBrowseCars" style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-padding: 8 15;"/>
+    </HBox>
+
+    <!-- Main Content -->
+    <HBox spacing="40" VBox.vgrow="ALWAYS">
+        <!-- Left Section - Car Details -->
+        <VBox spacing="20" prefWidth="400" style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0); -fx-padding: 20;">
+            <ImageView fx:id="carImage" fitWidth="360" fitHeight="240" preserveRatio="true" style="-fx-background-radius: 5;"/>
+            
+            <VBox spacing="15">
+                <Text fx:id="carModelText" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-fill: #1a237e;"/>
+                <HBox spacing="15">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Text text="Year" style="-fx-font-size: 14px; -fx-fill: #757575;"/>
+                        <Text fx:id="carYearText" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                    </VBox>
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Text text="Type" style="-fx-font-size: 14px; -fx-fill: #757575;"/>
+                        <Text fx:id="carTypeText" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                    </VBox>
+                </HBox>
+                <VBox spacing="5">
+                    <Text text="Price per Day" style="-fx-font-size: 14px; -fx-fill: #757575;"/>
+                    <Text fx:id="carPriceText" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-fill: #4caf50;"/>
+                </VBox>
+            </VBox>
+        </VBox>
+
+        <!-- Right Section - Booking Details -->
+        <VBox spacing="25" HBox.hgrow="ALWAYS" style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0); -fx-padding: 25;">
+            <Text text="Booking Details" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-fill: #1a237e;"/>
+            
+            <!-- Date Selection -->
+            <VBox spacing="15">
+                <Text text="Select Dates" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-fill: #424242;"/>
+                <HBox spacing="20">
+                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <Label text="Start Date" style="-fx-font-size: 14px; -fx-text-fill: #757575;"/>
+                        <DatePicker fx:id="startDatePicker" style="-fx-background-color: #f5f5f5; -fx-background-radius: 5;"/>
+                    </VBox>
+                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <Label text="End Date" style="-fx-font-size: 14px; -fx-text-fill: #757575;"/>
+                        <DatePicker fx:id="endDatePicker" style="-fx-background-color: #f5f5f5; -fx-background-radius: 5;"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <!-- Time Selection -->
+            <VBox spacing="15">
+                <Text text="Select Times" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-fill: #424242;"/>
+                <HBox spacing="20">
+                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <Label text="Start Time" style="-fx-font-size: 14px; -fx-text-fill: #757575;"/>
+                        <ComboBox fx:id="startTimeComboBox" style="-fx-background-color: #f5f5f5; -fx-background-radius: 5;"/>
+                    </VBox>
+                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <Label text="End Time" style="-fx-font-size: 14px; -fx-text-fill: #757575;"/>
+                        <ComboBox fx:id="endTimeComboBox" style="-fx-background-color: #f5f5f5; -fx-background-radius: 5;"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <!-- Payment Method -->
+            <!-- <VBox spacing="15">
+                <Text text="Payment Method" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-fill: #424242;"/>
+                <ComboBox fx:id="paymentMethodComboBox" style="-fx-background-color: #f5f5f5; -fx-background-radius: 5;"/>
+            </VBox> -->
+
+            <!-- Summary Section -->
+            <VBox spacing="15" style="-fx-background-color: #f5f5f5; -fx-background-radius: 10; -fx-padding: 20;">
+                <Text text="Booking Summary" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-fill: #1a237e;"/>
+                <GridPane hgap="20" vgap="15">
+                    <Label text="Number of Days:" style="-fx-font-size: 14px; -fx-text-fill: #757575;" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <Text fx:id="daysText" style="-fx-font-size: 16px; -fx-font-weight: bold;" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                    
+                    <Label text="Price per Day:" style="-fx-font-size: 14px; -fx-text-fill: #757575;" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <Text fx:id="pricePerDayText" style="-fx-font-size: 16px; -fx-font-weight: bold;" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                    
+                    <Label text="Total Price:" style="-fx-font-size: 16px; -fx-text-fill: #424242; -fx-font-weight: bold;" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                    <Text fx:id="totalPriceText" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-fill: #4caf50;" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                </GridPane>
+            </VBox>
+
+            <!-- Action Buttons -->
+            <HBox spacing="20" alignment="CENTER_RIGHT">
+                <Button text="Cancel" onAction="#handleBrowseCars" style="-fx-background-color: #f5f5f5; -fx-text-fill: #424242; -fx-font-weight: bold; -fx-background-radius: 5; -fx-padding: 10 20;"/>
+                <Button text="Confirm Booking" onAction="#handleConfirmBooking" style="-fx-background-color: #4caf50; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-padding: 10 20;"/>
+                <!-- <Button text="Confirm Booking" onAction="#handleConfirmBooking" style="-fx-background-color: #4caf50; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-padding: 10 20;"/> -->
+            </HBox>
+        </VBox>
+    </HBox>
+
+    <!-- Message Label -->
+    <Label fx:id="messageLabel" style="-fx-text-fill: #f44336; -fx-font-size: 14px; -fx-wrap-text: true;"/>
+</VBox> 

@@ -1,0 +1,265 @@
+/* Global Styles */
+.root {
+    -fx-background-color: #f8f9fa;
+    -fx-font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* Common Components */
+.page-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-fill: #1a237e;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #1a237e;
+    -fx-font-size: 14px;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+}
+
+.nav-button:hover {
+    -fx-background-color: #e8eaf6;
+}
+
+/* Browse Cars Page */
+.browse-cars-container {
+    -fx-background-color: #ffffff;
+}
+
+.search-filter-section {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 20;
+    -fx-background-radius: 8;
+}
+
+.search-field {
+    -fx-background-color: white;
+    -fx-background-radius: 4;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 4;
+    -fx-padding: 8 12;
+}
+
+.filter-combo {
+    -fx-background-color: white;
+    -fx-background-radius: 4;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 4;
+}
+
+.filter-button {
+    -fx-background-color: #1a237e;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 20;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+
+.filter-button:hover {
+    -fx-background-color: #283593;
+}
+
+.cars-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.cars-scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.dashboard-card {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+    -fx-padding: 15;
+    -fx-spacing: 10;
+}
+
+.dashboard-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 15, 0, 0, 3);
+    -fx-translate-y: -2;
+}
+
+/* Book Car Page */
+.book-car-container {
+    -fx-background-color: #ffffff;
+}
+
+.car-details-section {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 20;
+    -fx-background-radius: 8;
+}
+
+.car-image {
+    -fx-background-color: #e8eaf6;
+    -fx-background-radius: 8;
+}
+
+.car-info-box {
+    -fx-padding: 15;
+}
+
+.car-model-text {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-fill: #1a237e;
+}
+
+.car-detail-text {
+    -fx-font-size: 16px;
+    -fx-fill: #424242;
+}
+
+.car-price-text {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-fill: #1a237e;
+}
+
+.booking-details-section {
+    -fx-padding: 20;
+}
+
+.section-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-fill: #1a237e;
+}
+
+.booking-field-group {
+    -fx-padding: 15;
+    -fx-background-color: #f8f9fa;
+    -fx-background-radius: 8;
+}
+
+.field-group-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-fill: #424242;
+}
+
+.field-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #616161;
+}
+
+.date-picker, .time-combo, .payment-combo {
+    -fx-background-color: white;
+    -fx-background-radius: 4;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 4;
+    -fx-padding: 8 12;
+}
+
+.summary-section {
+    -fx-padding: 20;
+    -fx-background-color: #e8eaf6;
+    -fx-background-radius: 8;
+}
+
+.summary-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #616161;
+}
+
+.summary-value {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-fill: #1a237e;
+}
+
+.button-primary {
+    -fx-background-color: #1a237e;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10 24;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+
+.button-primary:hover {
+    -fx-background-color: #283593;
+}
+
+.button-secondary {
+    -fx-background-color: #e8eaf6;
+    -fx-text-fill: #1a237e;
+    -fx-font-weight: bold;
+    -fx-padding: 10 24;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+
+.button-secondary:hover {
+    -fx-background-color: #c5cae9;
+}
+
+.message-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #d32f2f;
+    -fx-padding: 10;
+    -fx-background-color: #ffebee;
+    -fx-background-radius: 4;
+}
+
+/* Scrollbar Styling */
+.scroll-bar:vertical,
+.scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .thumb,
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #c5cae9;
+    -fx-background-radius: 4;
+}
+
+.scroll-bar:vertical .thumb:hover,
+.scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: #1a237e;
+}
+
+/* ComboBox Styling */
+.combo-box {
+    -fx-background-color: white;
+    -fx-background-radius: 4;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 4;
+}
+
+.combo-box:hover {
+    -fx-border-color: #1a237e;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.combo-box .arrow {
+    -fx-background-color: #1a237e;
+}
+
+/* DatePicker Styling */
+.date-picker {
+    -fx-background-color: white;
+    -fx-background-radius: 4;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 4;
+}
+
+.date-picker:hover {
+    -fx-border-color: #1a237e;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.date-picker .arrow {
+    -fx-background-color: #1a237e;
+} 

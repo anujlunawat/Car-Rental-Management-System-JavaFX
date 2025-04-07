@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.effect.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.carrental.controller.ProfileController"
+            fitToWidth="true" style="-fx-background: #f8f9fa;">
+    <content>
+        <VBox style="-fx-background-color: #f8f9fa;" spacing="0">
+            <!-- Header Section -->
+            <HBox style="-fx-background-color: #2c3e50; -fx-padding: 20px;" alignment="CENTER_LEFT">
+                <Text text="Profile" style="-fx-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;" />
+            </HBox>
+
+            <!-- Body Content -->
+            <VBox spacing="20" style="-fx-padding: 30px;">
+                <!-- User Info Section -->
+                <VBox spacing="15" style="-fx-background-color: white; -fx-background-radius: 10px; -fx-padding: 25px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+                    <Text text="Personal Information" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-fill: #2c3e50;" />
+                    <Separator style="-fx-background-color: #e0e0e0;" />
+
+                    <GridPane hgap="20" vgap="15">
+                        <Label text="Full Name:" style="-fx-text-fill: #666666; -fx-font-size: 14px;" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                        <Text fx:id="nameText" style="-fx-font-size: 16px; -fx-fill: #2c3e50;" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+
+                        <Label text="Email:" style="-fx-text-fill: #666666; -fx-font-size: 14px;" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                        <Text fx:id="emailText" style="-fx-font-size: 16px; -fx-fill: #2c3e50;" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+                        <Label text="Phone:" style="-fx-text-fill: #666666; -fx-font-size: 14px;" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                        <Text fx:id="phoneText" style="-fx-font-size: 16px; -fx-fill: #2c3e50;" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+
+                        <Label text="Address:" style="-fx-text-fill: #666666; -fx-font-size: 14px;" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                        <Text fx:id="addressText" style="-fx-font-size: 16px; -fx-fill: #2c3e50;" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+
+                        <Label text="Member Since:" style="-fx-text-fill: #666666; -fx-font-size: 14px;" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+                        <Text fx:id="memberSinceText" style="-fx-font-size: 16px; -fx-fill: #2c3e50;" GridPane.rowIndex="4" GridPane.columnIndex="1" />
+                    </GridPane>
+                </VBox>
+
+                <!-- Statistics Section -->
+                <HBox spacing="20">
+                    <VBox style="-fx-background-color: white; -fx-background-radius: 10px; -fx-padding: 25px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);" HBox.hgrow="ALWAYS">
+                        <Text text="Total Bookings" style="-fx-font-size: 16px; -fx-fill: #666666;" />
+                        <Text fx:id="totalBookingsText" style="-fx-font-size: 24px; -fx-fill: #2c3e50; -fx-font-weight: bold;" />
+                    </VBox>
+
+                    <VBox style="-fx-background-color: white; -fx-background-radius: 10px; -fx-padding: 25px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);" HBox.hgrow="ALWAYS">
+                        <Text text="Active Bookings" style="-fx-font-size: 16px; -fx-fill: #666666;" />
+                        <Text fx:id="activeBookingsText" style="-fx-font-size: 24px; -fx-fill: #2c3e50; -fx-font-weight: bold;" />
+                    </VBox>
+
+                    <VBox style="-fx-background-color: white; -fx-background-radius: 10px; -fx-padding: 25px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);" HBox.hgrow="ALWAYS">
+                        <Text text="Total Spent" style="-fx-font-size: 16px; -fx-fill: #666666;" />
+                        <Text fx:id="totalSpentText" style="-fx-font-size: 24px; -fx-fill: #2c3e50; -fx-font-weight: bold;" />
+                    </VBox>
+                </HBox>
+
+                <!-- Recent Activity Section -->
+                <VBox spacing="15" style="-fx-background-color: white; -fx-background-radius: 10px; -fx-padding: 25px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);" minHeight="200" prefHeight="250">
+                    <Text text="Recent Activity" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-fill: #2c3e50;" />
+                    <Separator style="-fx-background-color: #e0e0e0;" />
+                    <ListView fx:id="activityListView" style="-fx-background-color: transparent; -fx-padding: 10px; -fx-font-size: 14px;" VBox.vgrow="ALWAYS">
+                        <placeholder>
+                            <Label text="No recent activity" style="-fx-text-fill: #666666; -fx-font-size: 14px; -fx-alignment: center;" />
+                        </placeholder>
+                    </ListView>
+                </VBox>
+
+                <!-- Buttons Section -->
+                <HBox spacing="20" alignment="CENTER_RIGHT">
+                    <Button text="Edit Profile" onAction="#handleEditProfile" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10px 20px; -fx-background-radius: 5px;" />
+                    <Button text="Back to Browse Cars" onAction="#handleBackToBrowseCars" style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10px 20px; -fx-background-radius: 5px;" />
+                </HBox>
+
+                <!-- Message Label -->
+                <Label fx:id="messageLabel" style="-fx-text-fill: #e74c3c; -fx-font-size: 14px;" visible="false" />
+            </VBox>
+        </VBox>
+    </content>
+</ScrollPane>

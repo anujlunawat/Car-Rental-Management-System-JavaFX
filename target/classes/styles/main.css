@@ -1,0 +1,223 @@
+/* Global Styles */
+.root {
+    -fx-background-color: #f5f5f5;
+    -fx-font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* Common Components */
+.header-text {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-fill: #1a237e;
+}
+
+.section-header {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-fill: #1a237e;
+}
+
+.primary-button {
+    -fx-background-color: #1a237e;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 8 16;
+    -fx-background-radius: 4;
+}
+
+.primary-button:hover {
+    -fx-background-color: #283593;
+}
+
+.secondary-button {
+    -fx-background-color: #e0e0e0;
+    -fx-text-fill: #424242;
+    -fx-font-size: 14px;
+    -fx-padding: 8 16;
+    -fx-background-radius: 4;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #bdbdbd;
+}
+
+.message-label {
+    -fx-font-size: 14px;
+    -fx-padding: 8;
+}
+
+/* Profile Page Styles */
+.profile-container {
+    -fx-spacing: 20;
+    -fx-padding: 20;
+}
+
+.profile-header {
+    -fx-background-color: white;
+    -fx-padding: 20;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+.profile-picture {
+    -fx-stroke: #1a237e;
+    -fx-stroke-width: 2;
+}
+
+.profile-info {
+    -fx-background-color: white;
+    -fx-padding: 20;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+.profile-stats {
+    -fx-background-color: white;
+    -fx-padding: 20;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+.stat-value {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-fill: #1a237e;
+}
+
+.stat-label {
+    -fx-font-size: 14px;
+    -fx-fill: #757575;
+}
+
+.activity-list {
+    -fx-background-color: white;
+    -fx-padding: 20;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+.activity-list .list-cell {
+    -fx-padding: 8;
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+}
+
+.activity-list .list-cell:selected {
+    -fx-background-color: #e8eaf6;
+}
+
+/* Edit Profile Page Styles */
+.edit-profile-container {
+    -fx-spacing: 20;
+    -fx-padding: 20;
+}
+
+.section-container {
+    -fx-background-color: white;
+    -fx-padding: 20;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+.text-field, .password-field, .text-area {
+    -fx-background-color: #f5f5f5;
+    -fx-background-radius: 4;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 4;
+    -fx-padding: 8;
+}
+
+.text-field:focused, .password-field:focused, .text-area:focused {
+    -fx-border-color: #1a237e;
+    -fx-background-color: white;
+}
+
+/* Browse Cars Page Styles */
+.car-grid {
+    -fx-hgap: 20;
+    -fx-vgap: 20;
+    -fx-padding: 20;
+}
+
+.car-card {
+    -fx-background-color: white;
+    -fx-padding: 15;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+.car-image {
+    -fx-background-color: #f5f5f5;
+    -fx-background-radius: 4;
+}
+
+.car-details {
+    -fx-spacing: 8;
+    -fx-padding: 10 0 0 0;
+}
+
+.car-name {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-fill: #1a237e;
+}
+
+.car-info {
+    -fx-font-size: 14px;
+    -fx-fill: #757575;
+}
+
+.car-price {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-fill: #1a237e;
+}
+
+/* Book Car Page Styles */
+.booking-container {
+    -fx-spacing: 20;
+    -fx-padding: 20;
+}
+
+.booking-section {
+    -fx-background-color: white;
+    -fx-padding: 20;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+.date-picker, .combo-box {
+    -fx-background-color: #f5f5f5;
+    -fx-background-radius: 4;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 4;
+    -fx-padding: 8;
+}
+
+.date-picker:focused, .combo-box:focused {
+    -fx-border-color: #1a237e;
+    -fx-background-color: white;
+}
+
+.summary-grid {
+    -fx-hgap: 20;
+    -fx-vgap: 10;
+    -fx-padding: 10 0;
+}
+
+.summary-label {
+    -fx-font-size: 14px;
+    -fx-fill: #757575;
+}
+
+.summary-value {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-fill: #1a237e;
+}
+
+.total-price {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-fill: #1a237e;
+} 

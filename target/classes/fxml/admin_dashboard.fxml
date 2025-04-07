@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.carrental.controller.AdminDashboardController"
+            styleClass="root">
+    
+    <!-- Top Header -->
+    <top>
+        <HBox styleClass="header" alignment="CENTER_LEFT" spacing="20">
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+            
+            <Text text="Admin Dashboard" styleClass="header-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button text="Add Car" onAction="#handleAddCar" styleClass="button-primary"/>
+                <Button text="Logout" onAction="#handleLogout" styleClass="button-secondary"/>
+            </HBox>
+        </HBox>
+    </top>
+    
+    <!-- Left Sidebar -->
+    <left>
+        <VBox styleClass="sidebar" spacing="10" prefWidth="200">
+            <padding>
+                <Insets top="20" right="10" bottom="20" left="10"/>
+            </padding>
+            
+            <Button text="Manage Cars" onAction="#handleManageCars" maxWidth="Infinity" styleClass="sidebar-button"/>
+            <Button text="View Bookings" onAction="#handleViewBookings" maxWidth="Infinity" styleClass="sidebar-button"/>
+            <Button text="Reports" onAction="#handleReports" maxWidth="Infinity" styleClass="sidebar-button"/>
+            <Button text="Manage Users" onAction="#handleManageUsers" maxWidth="Infinity" styleClass="sidebar-button"/>
+        </VBox>
+    </left>
+    
+    <!-- Main Content -->
+    <center>
+        <VBox spacing="20" style="-fx-padding: 20;">
+            <!-- Welcome Section -->
+            <VBox spacing="10">
+                <Text text="Welcome, Admin" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+                <Text text="Here's an overview of your rental system" style="-fx-font-size: 14px; -fx-fill: #7f8c8d;"/>
+            </VBox>
+            
+            <!-- Statistics Cards -->
+            <HBox spacing="20">
+                <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
+                    <Text text="Total Cars" styleClass="dashboard-card-title"/>
+                    <Text fx:id="totalCarsLabel" text="0" styleClass="dashboard-card-value"/>
+                </VBox>
+                
+                <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
+                    <Text text="Active Bookings" styleClass="dashboard-card-title"/>
+                    <Text fx:id="activeBookingsLabel" text="0" styleClass="dashboard-card-value"/>
+                </VBox>
+                
+                <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
+                    <Text text="Total Users" styleClass="dashboard-card-title"/>
+                    <Text fx:id="totalUsersLabel" text="0" styleClass="dashboard-card-value"/>
+                </VBox>
+                
+                <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
+                    <Text text="Total Revenue" styleClass="dashboard-card-title"/>
+                    <Text fx:id="totalRevenueLabel" text="$0" styleClass="dashboard-card-value"/>
+                </VBox>
+            </HBox>
+            
+            <!-- Recent Bookings Table -->
+            <VBox spacing="10" VBox.vgrow="ALWAYS">
+                <Text text="Recent Bookings" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                <TableView fx:id="recentBookingsTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="bookingIdColumn" text="Booking ID" prefWidth="100"/>
+                        <TableColumn fx:id="customerColumn" text="Customer" prefWidth="150"/>
+                        <TableColumn fx:id="carColumn" text="Car" prefWidth="150"/>
+                        <TableColumn fx:id="startDateColumn" text="Start Date" prefWidth="150"/>
+                        <TableColumn fx:id="endDateColumn" text="End Date" prefWidth="150"/>
+                        <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
+                        <TableColumn fx:id="totalCostColumn" text="Total Cost" prefWidth="100"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </VBox>
+    </center>
+</BorderPane> 
